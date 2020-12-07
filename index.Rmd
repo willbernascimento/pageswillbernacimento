@@ -1,0 +1,46 @@
+---
+title: "index"
+knit: (function(input_file, encoding) {
+  out_dir <- 'docs';
+  rmarkdown::render(input_file,
+ encoding=encoding,
+ output_file=file.path(dirname(input_file), out_dir, 'index.html'))})
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo=FALSE, warning=FALSE)
+
+library(leaflet)
+library(dplyr)
+```
+
+
+```{r, echo=FALSE, include=FALSE}
+df <- data.frame(
+  nome = c("Benedito Bentes","Ipioca","Jacarecica","Guaxuma" ,"Ponta Verde", "Jardim Petrópolis", "Pajuçara", "Jatiúca", "Farol"),
+  lon = c(-35.723900291548226, -35.59307204305285, -35.68960279186805, -35.67140586999964,-35.7051299731961, -35.74206859036543,-35.714088117641325,-35.7051801985592, -35.73546887448224),
+  lat = c(-9.555748523414824, -9.502584657716376, -9.61295424205534, -9.589704706283898, -9.66112857000408,-9.596781979703188,-9.667899793837643, -9.646746561720999, -9.643453501944709),
+  idh = c(0.522,0.573, 0.573, 0.573, 0.956, 0.956, 0.939,0.939,0.939),
+  renda_perc <- c(525.1,
+                  671.71,
+                  2264.67,
+                  1545.35,
+                  4432.46,
+                  2264.67,
+                  3235.92,
+                  3235.92,
+                  3235.92)
+  )
+```
+
+# O mapa
+
+```{r, echo=FALSE, warning=FALSE}
+
+leaflet(df) %>% 
+  addTiles() %>% 
+  addCircles(weight = 1, radius = sqrt(renda_perc)*30,stroke = F)
+
+```
+
