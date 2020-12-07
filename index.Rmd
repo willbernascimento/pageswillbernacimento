@@ -1,5 +1,5 @@
 ---
-title: "index"
+title: "Renda Per Capta Maceió,  AL, Brasil (Censo 2010)"
 knit: (function(input_file, encoding) {
   out_dir <- 'docs';
   rmarkdown::render(input_file,
@@ -10,7 +10,7 @@ output: html_document
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo=FALSE, warning=FALSE)
-
+library(htmltools)
 library(leaflet)
 library(dplyr)
 ```
@@ -22,7 +22,7 @@ df <- data.frame(
   lon = c(-35.723900291548226, -35.59307204305285, -35.68960279186805, -35.67140586999964,-35.7051299731961, -35.74206859036543,-35.714088117641325,-35.7051801985592, -35.73546887448224),
   lat = c(-9.555748523414824, -9.502584657716376, -9.61295424205534, -9.589704706283898, -9.66112857000408,-9.596781979703188,-9.667899793837643, -9.646746561720999, -9.643453501944709),
   idh = c(0.522,0.573, 0.573, 0.573, 0.956, 0.956, 0.939,0.939,0.939),
-  renda_perc <- c(525.1,
+  renda_perc = c(525.1,
                   671.71,
                   2264.67,
                   1545.35,
@@ -32,15 +32,37 @@ df <- data.frame(
                   3235.92,
                   3235.92)
   )
+
+# pal <- colorNumeric(
+#   palette = "YlGnBu",
+#   domain = df$renda_perc
+# )
 ```
 
-# O mapa
+Date: December 07, 2020
 
-```{r, echo=FALSE, warning=FALSE}
+[Maceió](https://pt.wikipedia.org/wiki/Macei%C3%B3) é a capital do [Estado de Alagoas](https://pt.wikipedia.org/wiki/Alagoas), situada no nordeste do Brasil. É uma cidade urbana e litorânea conhecida por suas [belezas naturais](https://www.pinterest.com/pin/52213676899375133/). 
 
-leaflet(df) %>% 
+### Renda per capta da região metropolina de Maceió
+
+```{r, echo=FALSE, warning=FALSE,comment=FALSE, message=FALSE}
+df %>% 
+leaflet() %>% 
   addTiles() %>% 
-  addCircles(weight = 1, radius = sqrt(renda_perc)*30,stroke = F)
+  addCircles(weight = 1, radius = sqrt(df$renda_perc)*30,label = df$renda_perc) %>% 
+  addLabelOnlyMarkers(~lon, ~lat, label = df$nome)
 
 ```
 
+
+O mapa apresenta **a renda per capta** de alguns bairros de Maceió. Estes bairro são classificados, pelo IBGE, como Unidades de Desenvolvimento Humano (UDH). Isto é, são esses bairros os alvos do IBGE para aplicação de pesquisas como Censos, PNAD e outros. 
+
+Quanto maior a área do circulo que compreende o bairro, maior a renda per capta dos moradores daquele bairro. Como vemos, Bairros como Ponta Verde, Jatiúca, Pajuçara e Farol possuem renda per capta maior que bairros como Benedito Bentes (bairro mais populoso da cidade de Maceió), ou Ipioca. 
+
+Para sermos mais precisos, a renda per capta no Benedito Bentes foi de R\$ 525,1. Enquanto a da Ponta Verde foi de R\$ 4432.46. Essa renda é cerca de  8,5 vezes maior. 
+
+
+## Fontes e Referências
+
+- Mapas criados com o pacote [leaflet](https://rstudio.github.io/leaflet)
+- Dados do IBGE coletados no site do [Atlas do Desenvolvimento Humano (PNUD)](http://www.atlasbrasil.org.br/)
