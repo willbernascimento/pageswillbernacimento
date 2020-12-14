@@ -1,0 +1,57 @@
+---
+title: "Desenvolvimento Humano no Brasil (2010)"
+author: Willber Nascimento
+date: 14 Dezembro, 2020
+output: ioslides_presentation
+knit: (function(input_file, encoding) {
+  out_dir <- 'docs';
+  rmarkdown::render(input_file,
+ encoding=encoding,
+ output_file=file.path(dirname(input_file), out_dir, 'page2.html'))})
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE, warning = FALSE, message = FALSE, comment = FALSE)
+library(readxl)
+library(plotly)
+library(stringr)
+
+data <- readRDS('./data/manipulated/banheiro_agua.rds')
+
+
+```
+
+## Introdução
+
+Utilizamos dados do último censo oficial brasileiro, realizado ano de 2010, para descrever diversas facetas do nível de desenvolvimento dentro dos estados brasileiros. 
+
+Informações gerais:
+
+- Principais dados: Censo 2010 (IBGE)
+- Unidade de análise: Estados (26 + Distrito Federal)
+
+## Condições da residência da população
+
+População morando em residências que possuem banheiro e água encanada, por estados e região do Brasil.
+
+```{r banheiro_agua}
+plot_ly(
+  data = data[data$Regiao_code != 'BR', ],
+  x = ~ banheiro_agua_encanada,
+  y = ~ mortalidade_infantil,
+  type = 'scatter',
+  color = ~Regiao_code,
+  size=1
+) %>%
+  layout(
+    xaxis = list(title = "População com banheiro e àgua encanada (%)"),
+    yaxis = list(title = "Mortalidade infantil")
+  )
+  
+```
+
+## Referências
+
+- Plataforma: [R](https://www.r-project.org/) e [Rstudio](https://rstudio.com/)
+- Ferramentas gráficas: [RMarkdown](https://rmarkdown.rstudio.com/) e [Plotly](https://plotly.com/)
+- Fonte da coleta: [Atlas do desenvolvimento Humano do Brasil](http://www.atlasbrasil.org.br/acervo/biblioteca)
